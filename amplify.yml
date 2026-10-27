@@ -1,0 +1,31 @@
+# AWS Amplify Hosting build spec for GER4K.
+#
+# GER4K is a Next.js 15.x App Router app with a dynamic server route
+# (`/api/ask`), so it is NOT a static export — it runs on Amplify's managed
+# Next.js SSR compute. Amplify auto-detects the Next.js framework; this file
+# only pins the install/build commands, the SSR artifacts, and the caches.
+#
+# No Bedrock/AWS env vars are required to build or run: the app ships a
+# deterministic Ask GER4K fallback. To enable live AI, set server-side env vars
+# in the Amplify console (see DEPLOY.md) — never with a NEXT_PUBLIC_ prefix.
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Reproducible install from the committed package-lock.json.
+        - npm ci
+    build:
+      commands:
+        # Produce the Next.js SSR build (.next). No env vars needed.
+        - npm run build
+  artifacts:
+    # Serve the Next.js SSR build output.
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    # Speed up subsequent builds by reusing deps and the Next.js build cache.
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*

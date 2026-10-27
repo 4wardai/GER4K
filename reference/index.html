@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GER4K — Klang Valley Mobility Companion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand-wrap">
+        <button class="icon-btn mobile-only" id="mobileMenu" aria-label="Menu">☰</button>
+        <div class="brand-mark">G</div>
+        <div>
+          <div class="brand">GER4K</div>
+          <div class="brand-sub">Klang Valley mobility companion</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="city-chip">🇲🇾 Kuala Lumpur <span>⌄</span></button>
+        <button class="ghost-btn" id="alertsBtn">Service status</button>
+        <div class="points-pill" id="pointsPill">✦ <span id="pointsValue">25</span> pts</div>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="panel">
+        <nav class="nav-tabs" aria-label="Primary">
+          <button class="nav-tab active" data-view="home">Home</button>
+          <button class="nav-tab" data-view="pulse">Pulse</button>
+          <button class="nav-tab" data-view="service">Service</button>
+          <button class="nav-tab" data-view="saved">Saved</button>
+        </nav>
+
+        <section class="view active" id="view-home">
+          <div class="home-scroll">
+            <section class="search-hero">
+              <div class="eyebrow">PLAN A JOURNEY</div>
+              <h1>Where are you going?</h1>
+              <div class="search-card">
+                <div class="input-row">
+                  <span class="dot start-dot"></span>
+                  <div class="field">
+                    <label>From</label>
+                    <input id="originInput" value="Putrajaya Sentral" />
+                  </div>
+                </div>
+                <div class="connector"></div>
+                <div class="input-row">
+                  <span class="dot end-dot"></span>
+                  <div class="field">
+                    <label>To</label>
+                    <input id="destInput" value="KLCC" />
+                  </div>
+                </div>
+                <div class="search-meta">
+                  <button class="meta-btn">Depart now ⌄</button>
+                  <button class="meta-btn">1 passenger</button>
+                </div>
+                <button class="primary-btn full" id="findRoutesBtn">Find routes <span>→</span></button>
+              </div>
+            </section>
+
+            <section id="homeBeforeSearch">
+              <div class="section-head">
+                <div>
+                  <div class="eyebrow">QUICK START</div>
+                  <h2>Your journeys</h2>
+                </div>
+              </div>
+
+              <button class="saved-card" id="savedTripBtn">
+                <div class="saved-icon">⌂</div>
+                <div class="saved-main">
+                  <strong>Putrajaya Sentral → KLCC</strong>
+                  <span>Usually 28–34 min · 1–2 changes</span>
+                </div>
+                <span class="chev">›</span>
+              </button>
+
+              <div class="service-mini">
+                <div class="section-head compact">
+                  <div>
+                    <div class="eyebrow">RELEVANT SERVICES</div>
+                  </div>
+                  <button class="text-btn" data-jump="service">View all</button>
+                </div>
+                <div class="service-row">
+                  <span class="line-badge putrajaya">12</span>
+                  <div>
+                    <strong>MRT Putrajaya Line</strong>
+                    <span>Normal service</span>
+                  </div>
+                  <span class="status-dot normal"></span>
+                </div>
+                <div class="service-row feeder-highlight">
+                  <span class="line-badge feeder">T</span>
+                  <div>
+                    <strong>MRT feeder T508</strong>
+                    <span><b>6 min</b> · Putrajaya Sentral → LRT connection</span>
+                  </div>
+                  <span class="live-label">SIM LIVE</span>
+                </div>
+              </div>
+
+              <div class="alert-card soft" id="proactiveAlert">
+                <div class="alert-icon">↗</div>
+                <div>
+                  <strong>GER4K watches your saved journeys</strong>
+                  <p>We'll surface a recovery plan when your usual route changes.</p>
+                </div>
+              </div>
+            </section>
+
+            <section id="journeyResults" class="hidden">
+              <div class="section-head journey-heading">
+                <div>
+                  <div class="eyebrow">YOUR JOURNEY</div>
+                  <h2>Putrajaya Sentral → KLCC</h2>
+                </div>
+                <button class="icon-save" id="saveCurrentBtn" title="Save journey">♡</button>
+              </div>
+
+              <div class="journey-summary" id="normalSummary">
+                <div>
+                  <span class="summary-label">Best route</span>
+                  <strong class="big-time">28 <small>min</small></strong>
+                </div>
+                <div class="summary-stat">
+                  <span>RM4.20</span>
+                  <small>demo fare estimate</small>
+                </div>
+                <div class="summary-stat">
+                  <span>1 change</span>
+                  <small>180 m walk</small>
+                </div>
+              </div>
+
+              <div id="normalRouteOptions">
+                <div class="mobility-switcher">
+                  <span>Compare modes</span>
+                  <div>
+                    <button type="button" class="mode-filter active" data-modefilter="all">All</button>
+                    <button type="button" class="mode-filter" data-modefilter="rail">Rail</button>
+                    <button type="button" class="mode-filter" data-modefilter="bus">Bus / feeder</button>
+                  </div>
+                </div>
+
+                <div class="option-label-row">
+                  <span>Suggested routes</span>
+                  <button class="filter-btn">☷ Filters</button>
+                </div>
+
+                <button class="route-card selected" data-route="normal-main">
+                  <div class="route-top">
+                    <div>
+                      <span class="route-kicker">RECOMMENDED</span>
+                      <strong>28 min</strong>
+                    </div>
+                    <span class="route-cost">RM4.20</span>
+                  </div>
+                  <div class="mode-strip">
+                    <span class="mode-chip putrajaya">MRT 12</span>
+                    <span class="arrow">›</span>
+                    <span class="walk-chip">🚶 3 min</span>
+                    <span class="arrow">›</span>
+                    <span class="mode-chip kelana">LRT 5</span>
+                  </div>
+                  <div class="route-sub">Putrajaya Sentral → Ampang Park → KLCC</div>
+                  <div class="route-foot">
+                    <span>Leaves now</span>
+                    <span>Arrive 5:28 PM</span>
+                  </div>
+                </button>
+
+                <button class="route-card bus-feature-card" data-route="normal-cheap">
+                  <div class="route-top">
+                    <div>
+                      <span class="route-kicker bus-kicker">BUS / FEEDER OPTION</span>
+                      <strong>35 min</strong>
+                    </div>
+                    <span class="route-cost">RM3.70</span>
+                  </div>
+                  <div class="bus-arrival-strip">
+                    <div class="bus-icon-big">🚌</div>
+                    <div>
+                      <strong>MRT Feeder T508</strong>
+                      <span>Arriving in ~6 min · <b>SIMULATED LIVE DATA</b></span>
+                    </div>
+                  </div>
+                  <div class="mode-strip">
+                    <span class="mode-chip feeder">T508</span>
+                    <span class="arrow">›</span>
+                    <span class="walk-chip">🚶 4 min</span>
+                    <span class="arrow">›</span>
+                    <span class="mode-chip kelana">LRT 5</span>
+                  </div>
+                  <div class="route-sub">Putrajaya Sentral → feeder bus → LRT connection → KLCC</div>
+                  <div class="route-foot">
+                    <span>320 m walking</span>
+                    <span>1 bus + 1 rail</span>
+                  </div>
+                </button>
+              </div>
+
+              <div id="disruptionExperience" class="hidden">
+                <div class="disruption-banner">
+                  <div class="warning-icon">!</div>
+                  <div class="disruption-copy">
+                    <span class="micro-badge">SIMULATED DEMO</span>
+                    <h3>Your journey has changed</h3>
+                    <p>Putrajaya Line interruption between <strong>TRX and Conlay</strong>.</p>
+                  </div>
+                </div>
+
+                <div class="section-head recovery-title">
+                  <div>
+                    <div class="eyebrow">GER4K RECOVERY</div>
+                    <h2>Best ways to keep moving</h2>
+                  </div>
+                </div>
+
+                <div class="preference-bar">
+                  <span>What's important?</span>
+                  <div class="pref-scroll">
+                    <button class="pref active" data-pref="balanced">Balanced</button>
+                    <button class="pref" data-pref="fastest">Fastest</button>
+                    <button class="pref" data-pref="cheapest">Cheapest</button>
+                    <button class="pref" data-pref="walking">Less walking</button>
+                    <button class="pref" data-pref="crowding">Avoid crowds</button>
+                  </div>
+                </div>
+
+                <div id="recoveryCards"></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-pulse">
+          <div class="subview-scroll">
+            <div class="section-head top-pad">
+              <div>
+                <div class="eyebrow">COMMUNITY INTELLIGENCE</div>
+                <h1>Station Pulse</h1>
+                <p class="section-desc">Conditions around your journey, summarized from recent reports.</p>
+              </div>
+            </div>
+
+            <div class="pulse-list">
+              <button class="pulse-card" data-station="TRX">
+                <div class="pulse-left">
+                  <div class="station-title">TRX</div>
+                  <div class="condition severe">PACKED</div>
+                  <p>Crowding is high right now</p>
+                  <div class="pulse-meta">12 reports · updated 2 min ago · High confidence</div>
+                </div>
+                <div class="pulse-spark">
+                  <span>↗</span>
+                  <small>Increasing</small>
+                </div>
+              </button>
+              <button class="pulse-card" data-station="Chan Sow Lin">
+                <div class="pulse-left">
+                  <div class="station-title">Chan Sow Lin</div>
+                  <div class="condition busy">BUSY</div>
+                  <p>Moderate crowding</p>
+                  <div class="pulse-meta">5 reports · updated 4 min ago · Medium confidence</div>
+                </div>
+                <div class="pulse-spark">
+                  <span>→</span>
+                  <small>Stable</small>
+                </div>
+              </button>
+              <button class="pulse-card" data-station="Pasar Seni">
+                <div class="pulse-left">
+                  <div class="station-title">Pasar Seni</div>
+                  <div class="condition normal">NORMAL</div>
+                  <p>Moving normally</p>
+                  <div class="pulse-meta">8 reports · updated 3 min ago · High confidence</div>
+                </div>
+                <div class="pulse-spark">
+                  <span>→</span>
+                  <small>Stable</small>
+                </div>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-service">
+          <div class="subview-scroll">
+            <div class="section-head top-pad">
+              <div>
+                <div class="eyebrow">NETWORK STATUS</div>
+                <h1>Service</h1>
+                <p class="section-desc">Official-style service information, community context, and GER4K impact.</p>
+              </div>
+            </div>
+
+            <div class="service-list full">
+              <button class="service-status-card">
+                <span class="line-badge putrajaya">12</span>
+                <div>
+                  <strong>MRT Putrajaya Line</strong>
+                  <span class="status-copy ok">Normal service</span>
+                </div>
+                <span class="chev">›</span>
+              </button>
+              <button class="service-status-card">
+                <span class="line-badge kajang">9</span>
+                <div>
+                  <strong>MRT Kajang Line</strong>
+                  <span class="status-copy ok">Normal service</span>
+                </div>
+                <span class="chev">›</span>
+              </button>
+              <button class="service-status-card">
+                <span class="line-badge kelana">5</span>
+                <div>
+                  <strong>LRT Kelana Jaya Line</strong>
+                  <span class="status-copy ok">Normal service</span>
+                </div>
+                <span class="chev">›</span>
+              </button>
+              <button class="service-status-card warning-service">
+                <span class="line-badge sri">4</span>
+                <div>
+                  <strong>LRT Sri Petaling Line</strong>
+                  <span class="status-copy warn">Modified service</span>
+                </div>
+                <span class="chev">›</span>
+              </button>
+            </div>
+
+            <div class="info-stack">
+              <div class="info-block official">
+                <span>OFFICIAL</span>
+                <strong>Putrajaya Line</strong>
+                <p>No current operator-confirmed disruption in this prototype.</p>
+              </div>
+              <div class="info-block community">
+                <span>COMMUNITY</span>
+                <strong>TRX currently packed</strong>
+                <p>12 recent reports · updated 2 min ago.</p>
+              </div>
+              <div class="info-block ger4k">
+                <span>GER4K</span>
+                <strong>Your route is currently normal</strong>
+                <p>Presenter mode can trigger the demo disruption and recovery flow.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-saved">
+          <div class="subview-scroll">
+            <div class="section-head top-pad">
+              <div>
+                <div class="eyebrow">PERSONAL</div>
+                <h1>Saved & preferences</h1>
+                <p class="section-desc">Journeys, mobility preferences, and community contribution.</p>
+              </div>
+            </div>
+
+            <div class="profile-card">
+              <div class="avatar">FI</div>
+              <div>
+                <strong>Community Helper</strong>
+                <span><b id="profilePoints">25</b> GER4K Points</span>
+              </div>
+            </div>
+
+            <div class="saved-list">
+              <button class="saved-card">
+                <div class="saved-icon">⌂</div>
+                <div class="saved-main">
+                  <strong>Putrajaya Sentral → KLCC</strong>
+                  <span>Saved commute</span>
+                </div>
+                <span class="chev">›</span>
+              </button>
+              <button class="saved-card">
+                <div class="saved-icon">＋</div>
+                <div class="saved-main">
+                  <strong>Add another journey</strong>
+                  <span>Save a frequent trip</span>
+                </div>
+                <span class="chev">›</span>
+              </button>
+            </div>
+
+            <div class="preferences-card">
+              <h3>Mobility preferences</h3>
+              <label><input type="checkbox" checked> Prefer less walking</label>
+              <label><input type="checkbox"> Fewer transfers</label>
+              <label><input type="checkbox"> Avoid crowded stations</label>
+              <label><input type="checkbox"> Travelling with elderly passenger</label>
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <section class="map-area">
+        <div class="map-topbar">
+          <div class="map-status">
+            <span class="live-dot"></span>
+            <span id="mapStatusText">Network overview</span>
+          </div>
+          <button class="map-btn" id="recenterBtn">◎ Recenter</button>
+        </div>
+
+        <div class="map-canvas">
+          <svg class="city-bg" viewBox="0 0 1000 760" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#eff7f1"/>
+                <stop offset="100%" stop-color="#edf3f8"/>
+              </linearGradient>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="6" stdDeviation="8" flood-opacity=".16"/>
+              </filter>
+            </defs>
+            <rect width="1000" height="760" fill="url(#bgGrad)"/>
+            <g opacity=".48" stroke="#c7d6c9" fill="none" stroke-width="2">
+              <path d="M40 90 C190 160, 250 120, 360 190 S570 250, 760 170 S900 180, 970 260"/>
+              <path d="M20 310 C160 270, 260 340, 410 320 S700 340, 980 280"/>
+              <path d="M60 570 C220 500, 330 560, 520 520 S760 470, 960 550"/>
+              <path d="M180 20 C140 200, 210 280, 160 450 S190 650, 160 750"/>
+              <path d="M430 0 C390 170, 450 290, 420 440 S460 640, 430 760"/>
+              <path d="M760 0 C720 170, 800 290, 760 430 S810 630, 790 760"/>
+            </g>
+            <g opacity=".28" fill="#dfe9df">
+              <path d="M0 0h270l-30 120-95 50-145-45z"/>
+              <path d="M620 0h380v150l-120 30-150-35z"/>
+              <path d="M0 600l160-40 130 90-20 110H0z"/>
+            </g>
+            <g class="map-labels" fill="#9aa8a3" font-size="16" font-family="Inter,Arial">
+              <text x="505" y="175">Kuala Lumpur</text>
+              <text x="690" y="340">Cheras</text>
+              <text x="310" y="330">Petaling Jaya</text>
+              <text x="575" y="605">Putrajaya</text>
+              <text x="235" y="545">Puchong</text>
+            </g>
+            <g id="networkLines">
+              <path class="base-line muted" d="M555 630 C540 570 525 520 510 470 C500 420 510 360 520 305 C530 260 550 230 570 205"/>
+              <path class="base-line faint" d="M500 390 C450 365 410 335 360 300"/>
+              <path class="base-line faint" d="M520 305 C600 300 680 315 740 350"/>
+            </g>
+            <g id="routeLayer"></g>
+            <g id="stationLayer"></g>
+          </svg>
+
+          <div class="map-legend">
+            <span><i class="legend-line current"></i> Selected route</span>
+            <span><i class="legend-line disruption"></i> Disruption</span>
+          </div>
+
+          <div class="map-floating-card" id="mapFloatingCard">
+            <div class="floating-top">
+              <span class="floating-label">SELECTED ROUTE</span>
+              <button class="close-floating" id="closeFloating">×</button>
+            </div>
+            <strong id="floatingTitle">Putrajaya Sentral → KLCC</strong>
+            <span id="floatingMeta">28 min · RM4.20 · 1 change</span>
+          </div>
+        </div>
+
+        <div class="mobile-bottom-nav">
+          <button class="mobile-nav active" data-view="home">⌂<span>Home</span></button>
+          <button class="mobile-nav" data-view="pulse">◉<span>Pulse</span></button>
+          <button class="mobile-nav" data-view="service">≋<span>Service</span></button>
+          <button class="mobile-nav" data-view="saved">♡<span>Saved</span></button>
+        </div>
+      </section>
+    </main>
+
+    <div class="presenter-bar">
+      <div>
+        <span class="presenter-label">PRESENTER</span>
+        <strong id="presenterState">Normal journey</strong>
+      </div>
+      <div class="presenter-actions">
+        <button id="triggerDisruptionBtn" class="presenter-primary">Trigger disruption</button>
+        <button id="resetDemoBtn" class="presenter-secondary">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Station detail modal -->
+  <div class="modal-backdrop hidden" id="stationModal">
+    <div class="modal-sheet">
+      <button class="modal-close" data-close="stationModal">×</button>
+      <div class="modal-eyebrow">STATION PULSE</div>
+      <h2 id="stationModalTitle">TRX</h2>
+      <div class="station-condition-row">
+        <span class="condition severe" id="stationModalCondition">PACKED</span>
+        <span class="confidence-pill">High confidence</span>
+      </div>
+      <p id="stationModalDesc">Crowding is high right now.</p>
+      <div class="modal-stats">
+        <div><strong id="stationReports">12</strong><span>recent reports</span></div>
+        <div><strong id="stationFreshness">2 min</strong><span>last update</span></div>
+        <div><strong>↗</strong><span>trend</span></div>
+      </div>
+      <div class="historical-card">
+        <span>HISTORICAL</span>
+        <strong>Demand: High</strong>
+        <p>This interchange historically carries high passenger demand.</p>
+      </div>
+      <div class="pedestrian-card">
+        <span>PEDESTRIAN CONNECTION</span>
+        <strong id="pedestrianTitle">Covered walking link available</strong>
+        <p id="pedestrianText">Approx. 4–6 min walk between relevant platforms/exits in this prototype.</p>
+      </div>
+      <button class="primary-btn full" id="reportConditionBtn">Report condition</button>
+      <button class="secondary-btn full">See recent reports</button>
+    </div>
+  </div>
+
+  <!-- Report modal -->
+  <div class="modal-backdrop hidden" id="reportModal">
+    <div class="modal-sheet report-sheet">
+      <button class="modal-close" data-close="reportModal">×</button>
+      <div class="modal-eyebrow">HELP OTHER COMMUTERS</div>
+      <h2>How is TRX right now?</h2>
+      <div class="report-grid">
+        <button data-report="Normal">🟢<span>Normal</span></button>
+        <button data-report="Busy">🟠<span>Busy</span></button>
+        <button data-report="Packed">🔴<span>Packed</span></button>
+        <button data-report="Cannot board">⛔<span>Cannot board</span></button>
+        <button data-report="Train stopped">🛑<span>Train stopped</span></button>
+        <button data-report="Replacement bus">🚌<span>Replacement bus</span></button>
+      </div>
+      <div class="report-note">Your report starts as <b>Unverified</b> until corroborated.</div>
+    </div>
+  </div>
+
+  <!-- Ask GER4K -->
+  <div class="modal-backdrop hidden" id="askModal">
+    <div class="modal-sheet ask-sheet">
+      <button class="modal-close" data-close="askModal">×</button>
+      <div class="ask-header">
+        <div class="ask-orb">✦</div>
+        <div>
+          <div class="modal-eyebrow">ASK GER4K</div>
+          <h2 id="askTitle">Why this route?</h2>
+        </div>
+      </div>
+      <div class="assistant-answer" id="assistantAnswer"></div>
+      <div class="quick-prompts">
+        <button data-ask-pref="walking">Less walking</button>
+        <button data-ask-pref="crowding">Avoid crowds</button>
+        <button data-ask-pref="cheapest">Cheapest</button>
+      </div>
+      <div class="ask-input">
+        <input id="askInput" placeholder="Ask about this journey..." />
+        <button id="askSendBtn">↑</button>
+      </div>
+      <div class="ai-note">GER4K explains structured journey data. It does not invent routes.</div>
+    </div>
+  </div>
+
+
+  <!-- Movable GER4K mobility co-pilot -->
+  <div class="g4bot" id="g4bot" aria-label="GER4K mobility assistant">
+    <div class="bot-bubble hidden" id="botBubble">
+      <div class="bot-head">
+        <div>
+          <span class="bot-kicker">GER4K CO-PILOT</span>
+          <strong>Ask me anything about your journey</strong>
+        </div>
+        <button type="button" class="bot-close" id="botClose" aria-label="Close assistant">×</button>
+      </div>
+      <div class="bot-answer" id="botAnswer" aria-live="polite">
+        Try asking about <b>bus arrivals</b>, <b>walking between stations</b>, <b>fares</b>, <b>crowding</b>, <b>service status</b>, or <b>which route I recommend</b>.
+      </div>
+      <div class="bot-quick">
+        <button type="button" data-botq="bus">🚌 Bus option</button>
+        <button type="button" data-botq="walk">🚶 Walking</button>
+        <button type="button" data-botq="crowd">👥 Crowding</button>
+        <button type="button" data-botq="fare">RM Fare</button>
+      </div>
+      <form class="bot-form" id="botForm">
+        <input id="botInput" aria-label="Ask GER4K" placeholder="Ask about transport, stations, walking..." />
+        <button type="submit" aria-label="Send question">↑</button>
+      </form>
+      <div class="bot-foot">
+        <span>Prototype answers use current demo data</span>
+        <div class="bot-dock-controls" aria-label="Move assistant">
+          <button type="button" id="botDockLeft" aria-label="Dock assistant left">←</button>
+          <button type="button" id="botDockRight" aria-label="Dock assistant right">→</button>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="bot-avatar" id="botAvatar" aria-label="Open GER4K mobility assistant">
+      <span class="bot-antenna"></span>
+      <span class="bot-face">
+        <i class="bot-eye"></i><i class="bot-eye"></i>
+        <i class="bot-mouth"></i>
+      </span>
+      <span class="bot-badge">Ask G4</span>
+    </button>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast hidden" id="toast">
+    <div class="toast-icon">✦</div>
+    <div>
+      <strong id="toastTitle">Report submitted</strong>
+      <span id="toastText">+5 GER4K Points</span>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
